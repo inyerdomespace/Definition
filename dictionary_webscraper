@@ -1,0 +1,27 @@
+try:        # to catch errors (exceptions)
+    import re
+    import urllib.request
+
+    url = "http://dictionary.reference.com/browse/" # use this site to get definitions
+
+    word = input("Enter your word: ")
+    url = url + word  # have to add on the word the user is searching to the end of the url(the url variable's value changed)
+    data = urllib.request.urlopen(url).read() # request to open that url with our word
+    data1 = data.decode("utf-8") # decode the data from bytes to readable language
+    print(data1)
+    m = re.search('meta name="description" content="', data1) # search in data1 for meta name="description" content="
+    start = m.end() # set "cursor" position to the end of: meta name="description" content=" <--------
+    end = start + 500 # since a definition an be long, make end of string +500 and just cut excess stuff later
+                      # we would use a print function to determine what we need to cut off(not needed in final code)
+
+    newString = data1[start:end]  # new var is set, take only the definition after meta name="description" content="up to 500 char
+
+    m = re.search('See more."/><meta', newString) # after finding excess metadata past the definition(using print function) we find it...
+    end = m.start() - 1 # ...and cut it. This end var goes to the START of the found excess string and goes back a space(cutting it)
+
+
+    newString1= newString[0:end]
+    print(newString1)
+
+except:
+    print("DOES NOT COMPUTE!!! Check your spelling, please") # this is what it says if you enter something wrong or weird
